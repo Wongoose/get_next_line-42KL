@@ -3,10 +3,12 @@
 
 # include <stdlib.h>
 # include <unistd.h>
-// # include <sys/types.h>
 # include <stdio.h>
 # include <fcntl.h>
-// # include <io.h>
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1000
+# endif
 
 char	*get_next_line(int fd);
 char    *ft_strchr(char *str, char c);

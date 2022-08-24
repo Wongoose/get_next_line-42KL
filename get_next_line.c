@@ -39,7 +39,7 @@ char	*read_line(char *content_buff)
 			break ;
 		i++;
 	}
-	line[i] = 0;
+	line[++i] = 0;
 	return (line);
 }
 
@@ -48,12 +48,12 @@ char	*read_file(int fd, char *content_buff)
 	char	*read_buff;
 	int		read_size;
 
-	read_buff = malloc(sizeof(char) * (BUFSIZ + 1));
+	read_buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	
 	read_size = 1;
 	while (read_size > 0)
 	{
-		read_size = read(fd, read_buff, BUFSIZ);
+		read_size = read(fd, read_buff, BUFFER_SIZE);
 		if (read_size == -1)
 		{
 			free(read_buff);
@@ -73,7 +73,7 @@ char    *get_next_line(int fd)
 	static char *content_buff;
 	char        *current_line;
 	
-	if (fd < 0 || BUFSIZ <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	if (!content_buff)
 		content_buff = malloc(sizeof(char));
