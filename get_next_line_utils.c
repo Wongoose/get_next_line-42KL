@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zwong <zwong@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/24 20:51:59 by zwong             #+#    #+#             */
+/*   Updated: 2022/08/24 20:51:59 by zwong            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 size_t	ft_strlen(char *str)
@@ -33,7 +45,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (new_str);
 }
 
-char    *ft_strchr(char *str, char c)
+char	*ft_strchr(char *str, char c)
 {
 	while (*str)
 	{

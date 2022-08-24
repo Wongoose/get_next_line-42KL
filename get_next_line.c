@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zwong <zwong@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/24 20:50:03 by zwong             #+#    #+#             */
+/*   Updated: 2022/08/24 20:50:03 by zwong            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 char	*remove_line_from_buff(char *content_buff)
@@ -9,6 +21,11 @@ char	*remove_line_from_buff(char *content_buff)
 	src_i = 0;
 	while (content_buff[src_i] && content_buff[src_i] != '\n')
 		src_i++;
+	if (!content_buff[src_i])
+	{
+		free(content_buff);
+		return (NULL);
+	}
 	extra_str = malloc(sizeof(char) * (ft_strlen(content_buff) - src_i + 1));
 	if (!extra_str)
 		return (NULL);
@@ -17,6 +34,7 @@ char	*remove_line_from_buff(char *content_buff)
 	while (content_buff[src_i])
 		extra_str[dst_i++] = content_buff[src_i++];
 	extra_str[dst_i] = 0;
+	free(content_buff);
 	return (extra_str);
 }
 
@@ -47,9 +65,11 @@ char	*read_file(int fd, char *content_buff)
 {
 	char	*read_buff;
 	int		read_size;
+	char	*temp;
 
+	if (!content_buff)
+		content_buff = malloc(sizeof(char) * 1);
 	read_buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	
 	read_size = 1;
 	while (read_size > 0)
 	{
@@ -60,33 +80,26 @@ char	*read_file(int fd, char *content_buff)
 			return (NULL);
 		}
 		read_buff[read_size] = 0;
-		content_buff = ft_strjoin(content_buff, read_buff);
+		temp = ft_strjoin(content_buff, read_buff);
+		free(content_buff);
 		if (ft_strchr(read_buff, '\n'))
 			break ;
 	}
 	free(read_buff);
-	return (content_buff);
+	return (temp);
 }
 
-char    *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-	static char *content_buff;
-	char        *current_line;
-	
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	static char	*content_buff;
+	char		*current_line;
+
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (NULL);
-	if (!content_buff)
-		content_buff = malloc(sizeof(char));
 	content_buff = read_file(fd, content_buff);
 	if (!content_buff)
 		return (NULL);
 	current_line = read_line(content_buff);
 	content_buff = remove_line_from_buff(content_buff);
-	if (!current_line)
-	{
-		free(content_buff);
-		free(current_line);
-		return (NULL);
-	}
 	return (current_line);
 }
