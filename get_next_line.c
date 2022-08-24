@@ -44,20 +44,22 @@ char	*read_line(char *content_buff)
 	char	*line;
 
 	i = 0;
+	if (!content_buff[i])
+		return (NULL);
 	while (content_buff[i] && content_buff[i] != '\n')
 		i++;
-	line = malloc(sizeof(char) * (i + 1));
+	line = malloc(sizeof(char) * (i + 2));
 	if (!line)
 		return (NULL);
 	i = 0;
 	while (content_buff[i])
 	{
 		line[i] = content_buff[i];
-		if (content_buff[i] == '\n')
-			break ;
 		i++;
+		if (content_buff[i - 1] == '\n')
+			break ;
 	}
-	line[++i] = 0;
+	line[i] = 0;
 	return (line);
 }
 
@@ -65,13 +67,12 @@ char	*read_file(int fd, char *content_buff)
 {
 	char	*read_buff;
 	int		read_size;
-	char	*temp;
 
-	if (!content_buff)
-		content_buff = malloc(sizeof(char) * 1);
 	read_buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!read_buff)
+		return (NULL);
 	read_size = 1;
-	while (read_size > 0)
+	while (read_size != 0)
 	{
 		read_size = read(fd, read_buff, BUFFER_SIZE);
 		if (read_size == -1)
@@ -80,13 +81,12 @@ char	*read_file(int fd, char *content_buff)
 			return (NULL);
 		}
 		read_buff[read_size] = 0;
-		temp = ft_strjoin(content_buff, read_buff);
-		free(content_buff);
+		content_buff = ft_strjoin(content_buff, read_buff);
 		if (ft_strchr(read_buff, '\n'))
 			break ;
 	}
 	free(read_buff);
-	return (temp);
+	return (content_buff);
 }
 
 char	*get_next_line(int fd)
@@ -94,7 +94,7 @@ char	*get_next_line(int fd)
 	static char	*content_buff;
 	char		*current_line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	content_buff = read_file(fd, content_buff);
 	if (!content_buff)

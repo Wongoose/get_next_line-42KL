@@ -26,22 +26,31 @@ char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*new_str;
 	size_t	total_size;
-	int		i;
+	size_t	i;
+	size_t	j;
 
+	if (!s1)
+	{
+		s1 = malloc(sizeof(char) * 1);
+		s1[0] = 0;
+	}
+	if (!s1 || !s2)
+		return (NULL);
 	total_size = ft_strlen(s1) + ft_strlen(s2);
 	new_str = malloc(sizeof(char) * (total_size + 1));
+	if (!new_str)
+		return (NULL);
 	i = 0;
-	while (*s1)
+	j = 0;
+	while (s1[i])
 	{
-		new_str[i++] = *s1;
-		s1++;
+		new_str[i] = s1[i];
+		i++;
 	}
-	while (*s2)
-	{
-		new_str[i++] = *s2;
-		s2++;
-	}
+	while (s2[j])
+		new_str[i++] = s2[j++];
 	new_str[i] = 0;
+	free(s1);
 	return (new_str);
 }
 
