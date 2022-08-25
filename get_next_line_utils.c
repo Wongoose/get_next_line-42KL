@@ -12,6 +12,22 @@
 
 #include "get_next_line.h"
 
+void	*ft_calloc(size_t size, size_t len)
+{
+	void			*res;
+	unsigned char	*dst;
+	size_t			i;
+
+	res = malloc(size * len);
+	if (!res)
+		return (NULL);
+	dst = res;
+	i = 0;
+	while (i++ < size * len)
+		*dst++ = 0;
+	return (res);
+}
+
 size_t	ft_strlen(char *str)
 {
 	size_t	i;
@@ -30,10 +46,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	size_t	j;
 
 	if (!s1)
-	{
-		s1 = malloc(sizeof(char) * 1);
-		s1[0] = 0;
-	}
+		s1 = ft_calloc(sizeof(char), 1);
 	if (!s1 || !s2)
 		return (NULL);
 	total_size = ft_strlen(s1) + ft_strlen(s2);
